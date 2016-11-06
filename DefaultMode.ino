@@ -3,13 +3,13 @@ boolean isDrawing = false;
 
 void setup()
 {
-  setupDisplay();  
+  setupDisplay();
   setupRotaryEncoder();
   setupButtons();
 }
 
 void loop(){
-  
+
   // check which mode we are
   if (drawingMode == 0) {
     default_mode();
@@ -26,7 +26,7 @@ void default_mode(){
     readRotaryEncoders();
 
     // Choose parameter. This controls which value will be modified by the knob
-    if (digitalRead(rotaryEncoder1_set_btnPin) == LOW) {
+    if (digitalRead(rotaryEncoderBtnPin) == LOW) {
       rotaryMode = (rotaryMode + 1) % 4;
       report();
       delay(300);
@@ -37,31 +37,31 @@ void default_mode(){
 
     // Change increment.
     if (digitalRead(buttonIncThousands) == LOW) {
-      rotary_increment = 1000; report();
+      rotaryIncrement = 1000; report();
       // cycleRotaryIncrement();
     } else if (digitalRead(buttonIncHundreds) == LOW){
-      rotary_increment = 100; report();
+      rotaryIncrement = 100; report();
     } else if (digitalRead(buttonIncTens) == LOW){
-      rotary_increment = 10; report();
+      rotaryIncrement = 10; report();
     } else if (digitalRead(buttonIncOnes) == LOW){
-      rotary_increment = 1; report();
+      rotaryIncrement = 1; report();
     }
 
     // Choose preset
     if (digitalRead(buttonPresets) == LOW) {
-      // increment preset_index
-      preset_index = preset_index + 1;
+      // increment presetIndex
+      presetIndex = presetIndex + 1;
 
       // check if at end of preset length, wrap
-      if (preset_index >= (sizeof (presets) / sizeof (*presets)) ){
-        preset_index = 0;
+      if (presetIndex >= (sizeof (presets) / sizeof (*presets)) ){
+        presetIndex = 0;
       }
 
       // make sure preset values are captured
-      setting_left_wheel_distance = presets[preset_index][0]; 
-      setting_left_wheel_speed = presets[preset_index][1];   // in mm
-      setting_right_wheel_speed = presets[preset_index][2];  // arbitrary scale
-      setting_right_wheel_distance = presets[preset_index][3]; // in mm
+      setting_left_wheel_distance = presets[presetIndex][0];
+      setting_left_wheel_speed = presets[presetIndex][1];   // in mm
+      setting_right_wheel_speed = presets[presetIndex][2];  // arbitrary scale
+      setting_right_wheel_distance = presets[presetIndex][3]; // in mm
 
       report();
       delay(200);
@@ -78,13 +78,13 @@ void default_mode(){
   } else {
 
     // Bounce the right wheel direction
-    if (stepper_r.distanceToGo() == 0) {
-      stepper_r.moveTo(-stepper_r.currentPosition());
+    if (stepperLeft.distanceToGo() == 0) {
+      stepperLeft.moveTo(-stepperLeft.currentPosition());
     }
 
     // Bounce the left wheel direction
-    if (stepper_l.distanceToGo() == 0) {
-      stepper_l.moveTo(-stepper_l.currentPosition());
+    if (stepperRight.distanceToGo() == 0) {
+      stepperRight.moveTo(-stepperRight.currentPosition());
     }
 
     // Look for stop button
@@ -95,8 +95,8 @@ void default_mode(){
     }
 
     // Go!
-    stepper_r.run();
-    stepper_l.run();
+    stepperLeft.run();
+    stepperRight.run();
 
   }
 }
@@ -115,14 +115,14 @@ void readModeButton(){
 
     if ( buttonDrawingMode_state == 0) {
       // if we get here then it is a fresh push
-      
+
       buttonDrawingMode_state = 1;
       drawingMode ++;
       if (drawingMode > 1) drawingMode = 0;
-    } 
+    }
 
   } else {
-    // mode button unpressed, 
+    // mode button unpressed,
     buttonDrawingMode_state = 0;
   }
 }
