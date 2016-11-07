@@ -23,28 +23,28 @@ const float ACCELERATION = 100;
 
 
 // Declare the motors (for AFMotor lib)
-AF_Stepper motorLeft(MOTOR_STEPS, 1);
-AF_Stepper motorRight(MOTOR_STEPS, 2);
+AF_Stepper motorRight(MOTOR_STEPS, 1);
+AF_Stepper motorLeft(MOTOR_STEPS, 2);
 
 // These methods are used as 'wrappers' so that we can use 2 motor libraries together
 // Note that each step can be SINGLE, DOUBLE, INTERLEAVE or MICROSTEP
-void forwardStepLeft() {
-  motorLeft.onestep(FORWARD, SINGLE);
-}
-void backwardStepLeft() {
-  motorLeft.onestep(BACKWARD, SINGLE);
-}
-// wrappers for the second motor!
 void forwardStepRight() {
-  motorRight.onestep(BACKWARD, SINGLE);
+  motorRight.onestep(FORWARD, SINGLE);
 }
 void backwardStepRight() {
-  motorRight.onestep(FORWARD, SINGLE);
+  motorRight.onestep(BACKWARD, SINGLE);
+}
+// wrappers for the second motor!
+void forwardStepLeft() {
+  motorLeft.onestep(BACKWARD, SINGLE);
+}
+void backwardStepLeft() {
+  motorLeft.onestep(FORWARD, SINGLE);
 }
 
 // Declare the AccelStepper motors (which 'wrap' the AFMotor lib motors)
-AccelStepper stepperLeft(forwardStepLeft, backwardStepLeft);
 AccelStepper stepperRight(forwardStepRight, backwardStepRight);
+AccelStepper stepperLeft(forwardStepLeft, backwardStepLeft);
 
 // These are settings captured by the UI settings
 long setting_right_wheel_distance = 93;	// in mm

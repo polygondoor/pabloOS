@@ -78,13 +78,13 @@ void default_mode(){
   } else {
 
     // Bounce the right wheel direction
-    if (stepperLeft.distanceToGo() == 0) {
-      stepperLeft.moveTo(-stepperLeft.currentPosition());
+    if (stepperRight.distanceToGo() == 0) {
+      stepperRight.moveTo(-stepperRight.currentPosition());
     }
 
     // Bounce the left wheel direction
-    if (stepperRight.distanceToGo() == 0) {
-      stepperRight.moveTo(-stepperRight.currentPosition());
+    if (stepperLeft.distanceToGo() == 0) {
+      stepperLeft.moveTo(-stepperLeft.currentPosition());
     }
 
     // Look for stop button
@@ -95,8 +95,8 @@ void default_mode(){
     }
 
     // Go!
-    stepperLeft.run();
     stepperRight.run();
+    stepperLeft.run();
 
   }
 }

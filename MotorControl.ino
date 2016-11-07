@@ -24,20 +24,20 @@ void captureSettings() {
   // turns in steps = 2048 * configuredDistance / (wheelDiam * 3.1416)
 
   // RIGHT WHEEL
-  stepperLeft.setMaxSpeed(setting_right_wheel_speed * 10); // max 400
-  stepperLeft.setAcceleration(ACCELERATION);
+  stepperRight.setMaxSpeed(setting_right_wheel_speed * 10); // max 400
+  stepperRight.setAcceleration(ACCELERATION);
   // calculate how many steps to go (here we divide by 2 because the bounce goes fowards and backwards)
   // STEP_FACTOR = (MOTOR_STEPS / (WHEEL_DIAMETER * Pi) / 2)
   steps = (setting_right_wheel_distance * STEP_FACTOR);
-  stepperLeft.moveTo(steps);
+  stepperRight.moveTo(steps);
   // message(String(steps) );
 
   // LEFT WHEEL
-  stepperRight.setMaxSpeed(setting_left_wheel_speed * 10); // max 400
-  stepperRight.setAcceleration(ACCELERATION);
+  stepperLeft.setMaxSpeed(setting_left_wheel_speed * 10); // max 400
+  stepperLeft.setAcceleration(ACCELERATION);
   // STEP_FACTOR = (MOTOR_STEPS / (WHEEL_DIAMETER * Pi) / 2)
   steps = (setting_left_wheel_distance * STEP_FACTOR);
-  stepperRight.moveTo(steps);
+  stepperLeft.moveTo(steps);
 }
 
 float speed_l;
@@ -51,14 +51,14 @@ void turn_wheels_mm(long distance_l, long distance_r, float top_speed){
   set_wheels_mm(distance_l, distance_r, top_speed);
 
   // Could make the check "> 1" so that the infinitesimal stop is not perceivable
-  while(stepperRight.distanceToGo() != 0 || stepperLeft.distanceToGo() != 0){
-    stepperRight.run();
+  while(stepperLeft.distanceToGo() != 0 || stepperRight.distanceToGo() != 0){
     stepperLeft.run();
+    stepperRight.run();
   }
 
   // reset the steppers to position 0
-  stepperLeft.setCurrentPosition(0);
   stepperRight.setCurrentPosition(0);
+  stepperLeft.setCurrentPosition(0);
 }
 
 void turn_wheels_mm(long distance_l, long distance_r){
@@ -79,13 +79,13 @@ void set_wheels_mm(long distance_l, long distance_r,  float top_speed) {
   }
 
   // translate distance into steps
-  stepperRight.setMaxSpeed(speed_l);
-  stepperRight.setAcceleration(100000);
-  stepperLeft.setMaxSpeed(speed_r);
+  stepperLeft.setMaxSpeed(speed_l);
   stepperLeft.setAcceleration(100000);
+  stepperRight.setMaxSpeed(speed_r);
+  stepperRight.setAcceleration(100000);
 
-  stepperRight.moveTo(distanceToSteps(distance_l));
-  stepperLeft.moveTo(distanceToSteps(distance_r));
+  stepperLeft.moveTo(distanceToSteps(distance_l));
+  stepperRight.moveTo(distanceToSteps(distance_r));
 }
 
 void set_wheels_mm(long distance_l, long distance_r){
@@ -97,14 +97,14 @@ void set_wheels_mm(long distance_l, long distance_r){
  */
 bool wheels_still_turning(){
     // Could make the check "> 1" so that the infinitesimal stop is not perceivable
-  if(stepperRight.distanceToGo() != 0 || stepperLeft.distanceToGo() != 0){
-    stepperRight.run();
+  if(stepperLeft.distanceToGo() != 0 || stepperRight.distanceToGo() != 0){
     stepperLeft.run();
+    stepperRight.run();
     return true;
   } else {
     // reset the steppers to position 0
-    stepperLeft.setCurrentPosition(0);
     stepperRight.setCurrentPosition(0);
+    stepperLeft.setCurrentPosition(0);
     return false;
   }
 
@@ -122,22 +122,22 @@ long distanceToSteps(long mm) {
  */
 void stopAndResetSteppers() {
   // stop everything
-  stepperLeft.stop(); // Stop as fast as possible: sets new target
   stepperRight.stop(); // Stop as fast as possible: sets new target
+  stepperLeft.stop(); // Stop as fast as possible: sets new target
 
   // set fast accelerations
-  stepperRight.setAcceleration(200);
   stepperLeft.setAcceleration(200);
+  stepperRight.setAcceleration(200);
 
   // leep going until everything has stopper
-  while(stepperRight.distanceToGo() > 0 || stepperLeft.distanceToGo() > 0){
-    stepperRight.run();
+  while(stepperLeft.distanceToGo() > 0 || stepperRight.distanceToGo() > 0){
     stepperLeft.run();
+    stepperRight.run();
   }
 
   // reset the steppers to position 0
-  stepperLeft.setCurrentPosition(0);
   stepperRight.setCurrentPosition(0);
+  stepperLeft.setCurrentPosition(0);
 
   // tell the system that we are no longer drawing
   isDrawing = false;
