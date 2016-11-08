@@ -5,7 +5,7 @@
 
 // making this into a constant to save recalculating it
 // over and over again
-const long STEP_FACTOR = (MOTOR_STEPS / (WHEEL_DIAMETER * 3.14159265) / 2);
+const long STEP_FACTOR = (MOTOR_STEPS / (WHEEL_DIAMETER * PI) / 2);
 
 // register the number of steps by processing the captured settings
 long steps = 0;
@@ -114,7 +114,7 @@ bool wheels_still_turning(){
  * Converts distance covered by wheel into steps for stepper driver.
  */
 long distanceToSteps(long mm) {
-  return mm * 2048 / (WHEEL_DIAMETER * 3.1416);
+  return mm * 2048 / (WHEEL_DIAMETER * PI);
 }
 
 /*
