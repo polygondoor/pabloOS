@@ -43,7 +43,7 @@ void report() {
   OLEDScreen.setCursor(50 , 18);
   OLEDScreen.print("+");
   OLEDScreen.setCursor(55 , 18);
-  OLEDScreen.print(rotary_increment);
+  OLEDScreen.print(rotaryIncrement);
 
   OLEDScreen.setTextSize(2);
 
